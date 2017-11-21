@@ -6,15 +6,15 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const redisClient = require('redis').createClient();
 
-var shortUrl = require('node-url-shortener');
+let shortUrl = require('node-url-shortener');
 
 shortUrl.short('https://google.com', function(err, url) {
-  console.log(url);
+//  console.log(url);
 });
 
 app.use(
   '/socket.io',
-  express.static(__dirname + 'node_modules/socket.io-client/dist/'),
+  express.static(__dirname + 'node_modules/socket.io-client/dist/')
 );
 
 redisClient.setnx('count', 0);
@@ -28,19 +28,22 @@ app.post('/', (req, res) => {
   let url;
   req.on('data', data => {
     body += data;
-    console.log(body);
+  //  console.log(body);
   });
   req.on('end', data => {
     //url = body['long-url'];
     let urlArray = body.split('=');
     shortUrl.short(urlArray[1], (err, shorturl) => {
-      redisClient.setnx(urlArray[1], shorturl);
+      redisClient.set(urlArray[1], shorturl, (err, reply) => {
+        io.emit("urlevent", shorturl);
+      });
       res.redirect('/');
     });
   });
 });
 
 io.on('connection', client => {
+
   redisClient.get('count', (err, count) => {
     client.emit('new count', count);
   });
