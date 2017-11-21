@@ -9,7 +9,7 @@ const redisClient = require('redis').createClient();
 let shortUrl = require('node-url-shortener');
 
 shortUrl.short('https://google.com', function(err, url) {
-//  console.log(url);
+  //  console.log(url);
 });
 
 app.use(
@@ -28,14 +28,14 @@ app.post('/', (req, res) => {
   let url;
   req.on('data', data => {
     body += data;
-  //  console.log(body);
+    //  console.log(body);
   });
   req.on('end', data => {
     //url = body['long-url'];
     let urlArray = body.split('=');
     shortUrl.short(urlArray[1], (err, shorturl) => {
       redisClient.set(urlArray[1], shorturl, (err, reply) => {
-        io.emit("urlevent", shorturl);
+        io.emit('urlevent', shorturl);
       });
       res.redirect('/');
     });
@@ -43,6 +43,35 @@ app.post('/', (req, res) => {
 });
 
 io.on('connection', client => {
+  /*
+  let info = {}
+  // redisClient.setnx(info, {})
+  redisClient.keys('*', (err, replies) => {
+    replies.forEach((reply) => {
+      info[reply] = redisClient.get(reply, (err, value) => {
+        console.log(info)
+        return Promise.resolve(value);
+      })
+    })
+    Promise.all(info).then((resInfo) => {
+      console.log(resInfo)
+    }).catch((err) => {
+      console.error(err);
+    })
+    client.emit("emit_event", info)
+  })
+*/
+  redisClient.keys('*', (err, keys) => {
+    let results = [];
+    keys.forEach(key => {
+      redisClient.get(key, (err, value) => {
+        const obj = {};
+        obj[key] = value;
+        results.push(obj);
+      });
+    });
+    client.emit('initial_results', results);
+  });
 
   redisClient.get('count', (err, count) => {
     client.emit('new count', count);
