@@ -1,4 +1,2 @@
-# assignment_dynamic_url_shortener
-Build a URL shortening service, outfitted with realtime analytics.
-Johann Baptista
-Gene Tinderholm
+# demo_well_tempered_counter
+The most gratuitously over-engineered counter to have ever incremented.
