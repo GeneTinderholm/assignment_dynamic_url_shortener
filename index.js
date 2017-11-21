@@ -5,7 +5,10 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const redisClient = require("redis").createClient();
-
+let shorturl = require('shorturl');
+shorturl('https://google.com', 'arsehat', function(result) {
+	console.log(result);
+});
 app.use(
   "/socket.io",
   express.static(__dirname + "node_modules/socket.io-client/dist/")
