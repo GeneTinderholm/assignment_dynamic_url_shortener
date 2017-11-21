@@ -24,12 +24,21 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-  const url = req.body.long-url;
-  shortUrl.short(url, (err, shorturl) => {
-    redisClient.setnx(url, shorturl);
-    res.redirect('/');
-  }) 
-})
+  let body = '';
+  let url;
+  req.on('data', data => {
+    body += data;
+    console.log(body);
+  });
+  req.on('end', data => {
+    //url = body['long-url'];
+    let urlArray = body.split('=');
+    shortUrl.short(urlArray[1], (err, shorturl) => {
+      redisClient.setnx(urlArray[1], shorturl);
+      res.redirect('/');
+    });
+  });
+});
 
 io.on('connection', client => {
   redisClient.get('count', (err, count) => {
