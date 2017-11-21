@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.15.2",
+    "node-url-shortener": "^1.0.1",
     "redis": "^2.7.1",
     "short-url": "0.0.1",
     "shorturl": "0.0.3",

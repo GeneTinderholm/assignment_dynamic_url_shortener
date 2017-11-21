@@ -29,6 +29,16 @@
 </body>
 
 <script>
+   
+let addRow = (url, newurl, clicks) => {
+  $('table').append(`<tr><td>${url}</td><td>${newurl}</td><td>${clicks}</td>`)
+}
+
+$('document').ready(function() {
+  addRow('sdfa', 'dsaf', '3');
+})
+
+/*
   var socket = io.connect('http://localhost:3002')
 
   socket.on('new count', function(count) {
@@ -42,5 +52,6 @@
   $("#decrement").click(function() {
     socket.emit('decrement')
   })
+*/
 </script>
 </html>
