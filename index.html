@@ -53,7 +53,9 @@ var socket = io.connect('http://localhost:3002');
 
 $('document').ready(function() {
 socket.on('initEvent', function(obj) {
-	let count[Object.keys(obj)[0]] = 0;
+	let count = {};
+	console.log(Object.keys(obj)[0]);
+	count[Object.keys(obj)[0]] = 0;
 	addRow(Object.keys(obj)[0], obj[Object.keys(obj)[0]], count[Object.keys(obj)[0]]);
 })
 $('a').on('click', (event)=>{
@@ -65,7 +67,7 @@ $('a').on('click', (event)=>{
 	rowObj2 = rowArr.join('<td>');
 	rowObj.replaceWith(rowObj2);
 	socket.emit('increment');
-}
+})
 })
 
 

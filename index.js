@@ -66,7 +66,6 @@ io.on('connection', client => {
       redisClient.get(key, (err, value) => {
         const obj = {};
         obj[key] = value;
-	obj[count] = 
 	client.emit('initEvent', obj);
 	//console.log(obj, 'post emit');
       });
