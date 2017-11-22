@@ -62,20 +62,21 @@ io.on('connection', client => {
   })
 */
   redisClient.keys('*', (err, keys) => {
-    let results = [];
     keys.forEach(key => {
       redisClient.get(key, (err, value) => {
         const obj = {};
         obj[key] = value;
-        results.push(obj);
+	obj[count] = 
+	client.emit('initEvent', obj);
+	//console.log(obj, 'post emit');
       });
     });
-    client.emit('initial_results', results);
   });
-
-  redisClient.get('count', (err, count) => {
+  console.log('code runs');
+  //io.emit('initEvent', "Hey");
+  /*redisClient.get('count', (err, count) => {
     client.emit('new count', count);
-  });
+  });*/
 
   client.on('increment', () => {
     redisClient.incr('count', (err, count) => {

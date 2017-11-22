@@ -1,63 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Well-Tempered Counter</title>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Well-Tempered Counter</title>
 
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-</head>
-<body>
-  <h1>Sockets!</h1>
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+	</head>
+	<body>
+		<h1>Sockets!</h1>
 
-  <h1 id="count"></h1>
-  <div id="content">
-<form method="post" action="/">
-	<input type="text" name="long-url" placeholder="Long URL">
-	<input type="submit" value="Shorten">
-</form>
-<table>
-	<tr>
-		<th>Original URL</th>
-		<th>Short URL</th>
-		<th>All Click</th>
-		</tr>
-</table>
-  </div>
-</body>
+		<h1 id="count"></h1>
+		<div id="content">
+			<form method="post" action="/">
+				<input type="text" name="long-url" placeholder="Long URL">
+				<input type="submit" value="Shorten">
+			</form>
+			<table>
+				<tr>
+					<th>Original URL</th>
+					<th>Short URL</th>
+					<th>All Click</th>
+				</tr>
+			</table>
+		</div>
+	</body>
 
-<script>
-   
+	<script>
+
 let addRow = (url, newurl, clicks) => {
-  $('table').append(`<tr><td>${url}</td><td>${newurl}</td><td>${clicks}</td>`)
+	$('table').append(`<tr><td>${url}</td><td><a href=\'${newurl}\'>${newurl}</a></td><td>${clicks}</td></tr>`)
 }
 
-  var socket = io.connect('http://localhost:3002')
+var socket = io.connect('http://localhost:3002');
+	console.log('does this happen?')
 
-  socket.on('urlevent', (shorturl) => {
-    console.log(shortul);
+/*socket.on('urlevent', (shorturl) => {
+  console.log(shortul);
   })
 
-  socket.on('new count', function(count) {
-    $("#count").html(count)
-  })
 
   $("#increment").click(function() {
-    socket.emit('increment')
+  socket.emit('increment')
   })
 
   $("#decrement").click(function() {
-    socket.emit('decrement')
-  })
+  socket.emit('decrement')
+  })*/
 
 
 $('document').ready(function() {
-  addRow('sdfa', 'dsaf', '3');
+socket.on('initEvent', function(obj) {
+	let count[Object.keys(obj)[0]] = 0;
+	addRow(Object.keys(obj)[0], obj[Object.keys(obj)[0]], count[Object.keys(obj)[0]]);
+})
+$('a').on('click', (event)=>{
+	let aObj = event.currentTarget;
+	let rowObj = aObj.parent().parent();
+	count[Object.keys(obj)[0]]+= 1;
+	let rowArr = rowObj.html().toString().split('<td>');
+	rowArr[3] = count[Object.keys(obj)[0]];
+	rowObj2 = rowArr.join('<td>');
+	rowObj.replaceWith(rowObj2);
+	socket.emit('increment');
+}
 })
 
 
 
-</script>
+	</script>
 </html>
